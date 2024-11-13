@@ -12,6 +12,7 @@ public class Space {
     private Timestamp spaceOperatingStart;
     private Timestamp spaceOperatingEnd;
 
+    // getter
     public int getSpaceId() {
         return spaceId;
     }
@@ -44,6 +45,7 @@ public class Space {
         return spaceOperatingEnd;
     }
 
+    // setter
     public void setSpaceId(int spaceId) {
         this.spaceId = spaceId;
     }

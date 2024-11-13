@@ -11,7 +11,7 @@ public interface SpaceRepository {
     // space 타입으로 검색
     Optional<Space> findBySpaceType(int spaceType);
     // space 상태로 검색
-    Optional<Space> findBySpaceStatus(int spaceStatus);
-    
+    Optional<Space> findBySpaceStatus(boolean spaceStatus);
+    // 모든 space 검색
     List<Space> findAll();
 }
