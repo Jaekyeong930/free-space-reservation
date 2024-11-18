@@ -5,12 +5,13 @@ import jkkim.space_reservation.repository.MemberRepository;
 import jkkim.space_reservation.repository.MemoryMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 // 서비스 클래스는 일반적으로 비즈니스 용어들을 채택한다.
-//@Service
+@Transactional
 public class MemberService {
     private MemberRepository memberRepository;
 
