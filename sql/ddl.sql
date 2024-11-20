@@ -26,8 +26,7 @@ CREATE TABLE member
     member_name VARCHAR(255),
     member_password VARCHAR(255),
     member_email VARCHAR(255),
-    member_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-
+    member_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;　-- java.time.LocalDateTime으로 매핑
 );
 
 CREATE TABLE room -- space는 예약어로 사용될 때가 있기 때문에 room으로 하는 것이 안전함
@@ -37,8 +36,8 @@ CREATE TABLE room -- space는 예약어로 사용될 때가 있기 때문에 roo
     room_type TINYINT, -- byte로 매핑
     room_name VARCHAR(255),
     room_capacity TINYINT DEFAULT 1,
-    room_operating_start TIMESTAMP,　-- java.time.LocalDateTime로 매핑
-    room_operating_end TIMESTAMP, -- java.time.LocalDateTime로 매핑
+    room_operating_start TIMESTAMP,　-- java.time.LocalDateTime으로 매핑
+    room_operating_end TIMESTAMP, -- java.time.LocalDateTime으로 매핑
     room_status BOOLEAN
 );
 
