@@ -1,8 +1,7 @@
 package jkkim.space_reservation.service;
 
 import jkkim.space_reservation.domain.Member;
-import jkkim.space_reservation.repository.MemberRepository;
-import jkkim.space_reservation.repository.MemoryMemberRepository;
+import jkkim.space_reservation.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

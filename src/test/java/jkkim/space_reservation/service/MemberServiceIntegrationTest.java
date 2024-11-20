@@ -28,6 +28,9 @@ class MemberServiceIntegrationTest {
         // given (기반이 되는 데이터)
         Member member = new Member();
         member.setMemberName("spring2");
+        member.setMemberPassword("password");
+        member.setMemberEmail("test@test.com");
+        member.setMemberType(false);
 
         // when (어떤 검증을 하는가)
         Long saveMemberId = memberService.join(member);

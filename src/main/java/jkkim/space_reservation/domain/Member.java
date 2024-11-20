@@ -2,6 +2,7 @@ package jkkim.space_reservation.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -17,17 +18,17 @@ public class Member {
     @Column(name = "member_name")
     private String  memberName;
 
-//    @Column(name = "member_type")
-//    private boolean memberType;
-//
-//    @Column(name = "member_password")
-//    private String  memberPassword;
-//
-//    @Column(name = "member_email")
-//    private String  memberEmail;
-//
-//    @Column(name = "member_created_at")
-//    private Date    memberCreatedAt;
+    @Column(name = "member_type")
+    private boolean memberType;
+
+    @Column(name = "member_password")
+    private String  memberPassword;
+
+    @Column(name = "member_email")
+    private String  memberEmail;
+
+    @Column(name = "member_created_at")
+    private LocalDateTime memberCreatedAt;
 
     // setter
     public void setMemberId(Long memberId) {
@@ -38,21 +39,21 @@ public class Member {
         this.memberName = memberName;
     }
 
-//    public void setMemberType(boolean memberType) {
-//        this.memberType = memberType;
-//    }
-//
-//    public void setMemberPassword(String memberPassword) {
-//        this.memberPassword = memberPassword;
-//    }
-//
-//    public void setMemberEmail(String memberEmail) {
-//        this.memberEmail = memberEmail;
-//    }
-//
-//    public void setMemberCreatedAt(Date memberCreatedAt) {
-//        this.memberCreatedAt = memberCreatedAt;
-//    }
+    public void setMemberType(boolean memberType) {
+        this.memberType = memberType;
+    }
+
+    public void setMemberPassword(String memberPassword) {
+        this.memberPassword = memberPassword;
+    }
+
+    public void setMemberEmail(String memberEmail) {
+        this.memberEmail = memberEmail;
+    }
+
+    public void setMemberCreatedAt(LocalDateTime memberCreatedAt) {
+        this.memberCreatedAt = memberCreatedAt;
+    }
 
     // getter
     public Long getMemberId() {
@@ -63,20 +64,20 @@ public class Member {
         return memberName;
     }
 
-//    public boolean isMemberType() {
-//        return memberType;
-//    }
-//
-//    public String getMemberPassword() {
-//        return memberPassword;
-//    }
-//
-//    public String getMemberEmail() {
-//        return memberEmail;
-//    }
-//
-//    public Date getMemberCreatedAt() {
-//        return memberCreatedAt;
-//    }
+    public boolean isMemberType() {
+        return memberType;
+    }
+
+    public String getMemberPassword() {
+        return memberPassword;
+    }
+
+    public String getMemberEmail() {
+        return memberEmail;
+    }
+
+    public LocalDateTime getMemberCreatedAt() {
+        return memberCreatedAt;
+    }
 
 }

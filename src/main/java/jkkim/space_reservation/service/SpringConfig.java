@@ -1,9 +1,7 @@
 package jkkim.space_reservation.service;
 
 import jakarta.persistence.EntityManager;
-import jkkim.space_reservation.repository.JpaMemberRepository;
 import jkkim.space_reservation.repository.*;
-import jkkim.space_reservation.repository.MemoryMemberRepository;
 import jkkim.space_reservation.service.MemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
