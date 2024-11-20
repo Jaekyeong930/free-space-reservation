@@ -2,7 +2,7 @@ package jkkim.space_reservation.service;
 
 import jakarta.persistence.EntityManager;
 import jkkim.space_reservation.repository.JpaMemberRepository;
-import jkkim.space_reservation.repository.MemberRepository;
+import jkkim.space_reservation.repository.*;
 import jkkim.space_reservation.repository.MemoryMemberRepository;
 import jkkim.space_reservation.service.MemberService;
 
@@ -13,20 +13,25 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringConfig {
 
-    private final EntityManager em;
+    // JPA용 상수
+//    private final EntityManager em;
+    // Spring Data JPA용 상수
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public SpringConfig(EntityManager em) {
-        this.em = em;
+    public SpringConfig(MemberRepository memberRepository) {
+//        this.em = em;
+        this.memberRepository = memberRepository;
     }
 
     @Bean
     public MemberService memberService() {
-        return new MemberService(memberRepository());
+//        return new MemberService(memberRepository());
+        return new MemberService(memberRepository);
     }
 
-    @Bean
-    public MemberRepository memberRepository() {
-        return new JpaMemberRepository(em);
-    }
+//    @Bean
+//    public MemberRepository memberRepository() {
+//        return new JpaMemberRepository(em);
+//    }
 }

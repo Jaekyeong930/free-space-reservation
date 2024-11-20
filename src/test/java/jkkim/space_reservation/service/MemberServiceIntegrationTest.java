@@ -1,7 +1,7 @@
 package jkkim.space_reservation.service;
 
 import jkkim.space_reservation.domain.Member;
-import jkkim.space_reservation.repository.MemoryMemberRepository;
+import jkkim.space_reservation.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +12,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -19,21 +20,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class MemberServiceIntegrationTest {
 
     @Autowired MemberService memberService;
-    @Autowired MemoryMemberRepository memberRepository;
+    @Autowired MemberRepository memberRepository;
 
     @Test // 테스트 메서드는 영어가 아니어도 됨! 프로덕트가 build될 때 테스트코드는 포함되지 않음
     @Commit // 테스트 시 데이터를 DB에 반영한다
     void 회원가입() {
         // given (기반이 되는 데이터)
         Member member = new Member();
-        member.setMemberName("spring");
+        member.setMemberName("spring2");
 
         // when (어떤 검증을 하는가)
         Long saveMemberId = memberService.join(member);
 
         // then
-        Member findMember = memberService.findOne(saveMemberId).get();
-        Assertions.assertThat(member.getMemberName()).isEqualTo(findMember.getMemberName());
+        Member findMember = memberRepository.findByMemberId(saveMemberId).get();
+        assertEquals(member.getMemberName(), findMember.getMemberName());
     }
 
     @Test
