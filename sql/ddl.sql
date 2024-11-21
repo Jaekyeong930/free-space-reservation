@@ -26,7 +26,7 @@ CREATE TABLE member
     member_name VARCHAR(255),
     member_password VARCHAR(255),
     member_email VARCHAR(255),
-    member_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;　-- java.time.LocalDateTime으로 매핑
+    member_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP　-- java.time.LocalDateTime으로 매핑
 );
 
 CREATE TABLE room -- space는 예약어로 사용될 때가 있기 때문에 room으로 하는 것이 안전함
