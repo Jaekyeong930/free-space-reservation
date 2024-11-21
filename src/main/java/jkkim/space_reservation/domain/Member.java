@@ -12,23 +12,24 @@ public class Member {
 
     @Id // Id는 PK를 의미
     @GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY는 자동으로 값을 넣어주는 컬럼이라는 것을 의미
-    @Column(name = "member_id")
+    @Column(name = "member_id", nullable = false, updatable = false)
     private Long    memberId;
 
-    @Column(name = "member_name")
+    @Column(name = "member_name", nullable = false, updatable = false)
     private String  memberName;
 
-    @Column(name = "member_type")
-    private boolean memberType;
+    @Column(name = "member_type", nullable = false, updatable = false)
+    private boolean memberType = false;
 
-    @Column(name = "member_password")
+    @Column(name = "member_password", nullable = false)
     private String  memberPassword;
 
-    @Column(name = "member_email")
+    @Column(name = "member_email", nullable = false)
     private String  memberEmail;
 
-    @Column(name = "member_created_at")
-    private LocalDateTime memberCreatedAt;
+    // 가입날짜는 자동 입력되도록 함
+    @Column(name = "member_created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime memberCreatedAt = LocalDateTime.now();
 
     // setter
     public void setMemberId(Long memberId) {
@@ -39,9 +40,10 @@ public class Member {
         this.memberName = memberName;
     }
 
-    public void setMemberType(boolean memberType) {
-        this.memberType = memberType;
-    }
+//    회원의 타입(운영자/이용자)은 유저가 지정할 수 없도록 한다. 기본값은 0(이용자)
+//    public void setMemberType(boolean memberType) {
+//        this.memberType = memberType;
+//    }
 
     public void setMemberPassword(String memberPassword) {
         this.memberPassword = memberPassword;
@@ -51,9 +53,10 @@ public class Member {
         this.memberEmail = memberEmail;
     }
 
-    public void setMemberCreatedAt(LocalDateTime memberCreatedAt) {
-        this.memberCreatedAt = memberCreatedAt;
-    }
+//    회원가입한 날짜는 유저가 임의로 지정할 수 없게 해야하므로 setter를 삭제한다.
+//    public void setMemberCreatedAt(LocalDateTime memberCreatedAt) {
+//        this.memberCreatedAt = memberCreatedAt;
+//    }
 
     // getter
     public Long getMemberId() {
@@ -64,9 +67,7 @@ public class Member {
         return memberName;
     }
 
-    public boolean isMemberType() {
-        return memberType;
-    }
+    public boolean isMemberType() { return memberType; }
 
     public String getMemberPassword() {
         return memberPassword;
@@ -76,8 +77,6 @@ public class Member {
         return memberEmail;
     }
 
-    public LocalDateTime getMemberCreatedAt() {
-        return memberCreatedAt;
-    }
+    public LocalDateTime getMemberCreatedAt() { return memberCreatedAt; }
 
 }

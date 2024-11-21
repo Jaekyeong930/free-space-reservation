@@ -21,12 +21,12 @@ FLUSH PRIVILEGES;
 
 CREATE TABLE member
 (
-    member_id BIGINT AUTO_INCREMENT PRIMARY KEY ,
-    member_type BOOLEAN,
-    member_name VARCHAR(255),
-    member_password VARCHAR(255),
-    member_email VARCHAR(255),
-    member_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP　-- java.time.LocalDateTime으로 매핑
+    member_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_type BOOLEAN NOT NULL DEFAULT 0,    -- 기본값 0, NULL 불가
+    member_name VARCHAR(255) NOT NULL,          -- NULL 불가
+    member_password VARCHAR(255) NOT NULL,      -- NULL 불가
+    member_email VARCHAR(255) NOT NULL,         -- NULL 불가
+    member_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP -- 기본값 CURRENT_TIMESTAMP, NULL 불가
 );
 
 CREATE TABLE room -- space는 예약어로 사용될 때가 있기 때문에 room으로 하는 것이 안전함
