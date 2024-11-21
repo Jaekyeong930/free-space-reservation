@@ -44,6 +44,21 @@ public class MemberService {
                             throw new IllegalStateException(("이미 존재하는 회원입니다"));
                         });
     }
+    
+    // 회원가입 아이디(memberName) 유효성 검사
+    private void validateMemberId(Member member) {
+
+    }
+
+    // 회원가입 비밀번호(memberPassword) 유효성 검사
+    private void validateMemberPassword(Member member) {
+
+    }
+    
+    // 회원가입 이메일(memberEmail) 유효성 검사
+    private void validateMemberEmail(Member member) {
+
+    }
 
     /*
     전체 회원 조회

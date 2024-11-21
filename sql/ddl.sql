@@ -32,13 +32,13 @@ CREATE TABLE member
 CREATE TABLE room -- space는 예약어로 사용될 때가 있기 때문에 room으로 하는 것이 안전함
 (
     room_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    room_area VARCHAR(30),
-    room_type TINYINT, -- byte로 매핑
-    room_name VARCHAR(255),
-    room_capacity TINYINT DEFAULT 1,
-    room_operating_start TIMESTAMP,　-- java.time.LocalDateTime으로 매핑
-    room_operating_end TIMESTAMP, -- java.time.LocalDateTime으로 매핑
-    room_status BOOLEAN
+    room_area VARCHAR(30) NOT NULL,
+    room_type TINYINT NOT NULL, -- byte로 매핑, 회의실인지 1인좌석인지
+    room_name VARCHAR(255) NOT NULL,
+    room_capacity TINYINT NOT NULL DEFAULT 1, -- default 1인 좌석
+    room_operating_start TIMESTAMP NOT NULL,　-- java.time.LocalDateTime으로 매핑
+    room_operating_end TIMESTAMP NOT NULL, -- java.time.LocalDateTime으로 매핑
+    room_status BOOLEAN NOT NULL DEFAULT 1 -- default 비어있음
 );
 
 CREATE TABLE reservation
