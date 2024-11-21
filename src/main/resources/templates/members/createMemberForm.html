@@ -8,8 +8,12 @@
 <div class="container">
   <form action="/members/new" method="post">
     <div class="form-group">
-      <label for="name">이름</label>
-      <input type="text" id="name" name="memberName" placeholder="이름을 입력하세요"/>
+      <label for="memberName">이름</label>
+      <input type="text" id="memberName" name="memberName" placeholder="이름을 입력하세요"/>
+      <label for="memberPassword">비밀번호</label>
+      <input type="password" id="memberPassword" name="memberPassword" placeholder="비밀번호를 입력하세요"/>
+      <label for="memberEmail">이메일</label>
+      <input type="text" id="memberEmail" name="memberEmail" placeholder="이메일"/>
     </div>
     <button type="submit">등록</button>
   </form>
