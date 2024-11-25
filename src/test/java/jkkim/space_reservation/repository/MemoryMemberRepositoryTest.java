@@ -1,5 +1,6 @@
 package jkkim.space_reservation.repository;
 
+import jkkim.space_reservation.repository.MemoryMemberRepository;
 import jkkim.space_reservation.domain.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
