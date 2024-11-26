@@ -10,7 +10,10 @@
     <div class="form-group">
       <div>
         <label for="memberName">아이디</label>
-        <input type="text" id="memberName" name="memberName" placeholder="이름을 입력하세요"/>
+        <input type="text" id="memberName" name="memberName" placeholder="아이디를 입력하세요"/>
+        <span th:if="${duplicateIdMessage}" style="color:red;">
+          <p th:text="${duplicateIdMessage}" style="display:inline;"></p>
+        </span>
       </div>
       <div>
         <label for="memberPassword">비밀번호</label>

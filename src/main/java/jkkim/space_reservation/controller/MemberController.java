@@ -42,7 +42,7 @@ public class MemberController {
 
         // 아이디 중복 검사 (반환값이 true일 경우 알림을 표시)
         if (memberService.isDuplicateMember(form)) {
-            model.addAttribute("errorMessage", "중복된 아이디입니다.");
+            model.addAttribute("duplicateIdMessage", "중복된 아이디입니다.");
             return "members/createMemberForm";
         }
 
