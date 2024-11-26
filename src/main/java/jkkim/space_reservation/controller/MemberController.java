@@ -40,6 +40,12 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
+        // 아이디 중복 검사 (반환값이 true일 경우 알림을 표시)
+        if (memberService.isDuplicateMember(form)) {
+            model.addAttribute("errorMessage", "중복된 아이디입니다.");
+            return "members/createMemberForm";
+        }
+
         // 비밀번호 유효성 검사
         if (!isValidPassword(form)) {
             model.addAttribute("errorMessage", "비밀번호는 영문 대소문자와 숫자만 포함하며, 6~20자리여야 합니다. (특수문자 허용)");

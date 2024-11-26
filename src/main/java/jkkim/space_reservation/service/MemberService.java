@@ -1,9 +1,10 @@
 package jkkim.space_reservation.service;
 
+import jkkim.space_reservation.controller.MemberForm;
 import jkkim.space_reservation.domain.Member;
 import jkkim.space_reservation.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.hibernate.NonUniqueResultException;
+import org.hibernate.loader.NonUniqueDiscoveredSqlAliasException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,31 +32,21 @@ public class MemberService {
 //        });
 
         // 중복회원 검증
-        validateDuplicateMember(member);
+//        isDuplicateMember(member);
 
         memberRepository.save(member);
         return member.getMemberId();
     }
 
     // 회원가입 아이디 중복검사
-    private void validateDuplicateMember(Member member) {
-        // 아래처럼 로직이 길어지는 경우, 메서드로 뽑는 것이 좋다. (ctrl+T 해서 extract method)
-        memberRepository.findByMemberName(member.getMemberName())
-                .ifPresent(m -> {
-                    throw new IllegalStateException(("이미 존재하는 회원입니다"));
-                });
+    public boolean isDuplicateMember(MemberForm member) {
+        try {
+            return memberRepository.findByMemberName(member.getMemberName()).isPresent();
+        } catch (NonUniqueResultException e) {
+            // 중복된 데이터가 존재하는 경우 true 반환
+            return true;
+        }
     }
-
-    // 회원가입 아이디(memberName) 유효성 검사
-    private void validateMemberId(Member member) {
-
-    }
-
-    // 회원가입 비밀번호(memberPassword) 유효성 검사
-    private void validateMemberPassword(Member member) {
-
-    }
-
 
 
     /*

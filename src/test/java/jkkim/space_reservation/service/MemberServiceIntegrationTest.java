@@ -27,7 +27,7 @@ class MemberServiceIntegrationTest {
     void 회원가입() {
         // given (기반이 되는 데이터)
         Member member = new Member();
-        member.setMemberName("jkkim");
+        member.setMemberName("violet");
         member.setMemberPassword("password");
         member.setMemberEmail("test@test.com");
 //        member.setMemberType(false);
