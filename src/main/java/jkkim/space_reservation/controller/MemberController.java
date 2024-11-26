@@ -125,6 +125,29 @@ public class MemberController {
     }
 
     /*
+    * 로그인
+    * */
+    @GetMapping("/members/login")
+    public String loginForm() {
+        return "members/login";
+    }
+
+    @PostMapping()
+    public String login(LoginForm loginForm, Model model) {
+        Member member = new Member();
+
+        // 아이디 존재, 비밀번호 일치 여부 확인
+        if (!memberService.authenticate(loginForm)) {
+            model.addAttribute("loginErrorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            return "members/login";
+        }
+
+
+
+        return "redirect:/";
+    }
+
+    /*
     * 회원 조회
     * */
     @GetMapping("/members")

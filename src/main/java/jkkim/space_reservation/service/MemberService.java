@@ -1,5 +1,6 @@
 package jkkim.space_reservation.service;
 
+import jkkim.space_reservation.controller.LoginForm;
 import jkkim.space_reservation.controller.MemberForm;
 import jkkim.space_reservation.domain.Member;
 import jkkim.space_reservation.repository.*;
@@ -46,6 +47,14 @@ public class MemberService {
             // 중복된 데이터가 존재하는 경우 true 반환
             return true;
         }
+    }
+
+    // 로그인 정보 확인. 아이디가 존재하는지 확인하고, 존재한다면 비밀번호 일치 여부를 확인한다.
+    // 회원 정보가 존재하면 true를 반환한다.
+    public boolean authenticate(LoginForm loginData) {
+        return memberRepository.findByMemberName(loginData.getMemberName())
+                .filter(member -> member.getMemberPassword().equals(loginData.getMemberPassword()))
+                .isPresent();
     }
 
 

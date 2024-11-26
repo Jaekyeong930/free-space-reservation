@@ -1,12 +1,10 @@
 package jkkim.space_reservation.controller;
 
-public class MemberForm {
+public class LoginForm {
 
     private String memberName;
 
     private String memberPassword;
-
-    private String memberEmail;
 
     // setter
     public void setMemberName(String memberName) {
@@ -15,15 +13,12 @@ public class MemberForm {
 
     public void setMemberPassword(String memberPassword) { this.memberPassword = memberPassword; }
 
-    public void setMemberEmail(String memberEmail) { this.memberEmail = memberEmail; }
-
     // getter
-    public String getMemberName() {
-        return memberName;
-    }
 
     public String getMemberPassword() { return memberPassword; }
 
-    public String getMemberEmail() { return memberEmail; }
+    public String getMemberName() {
+        return memberName;
+    }
 
 }
