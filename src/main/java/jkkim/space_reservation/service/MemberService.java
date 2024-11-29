@@ -6,6 +6,8 @@ import jkkim.space_reservation.domain.Member;
 import jkkim.space_reservation.repository.*;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.loader.NonUniqueDiscoveredSqlAliasException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,17 +17,19 @@ import java.util.Optional;
 @Transactional
 public class MemberService {
     private MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    //    @Autowired
-    public MemberService(MemberRepository memberRepository) {
+    @Autowired
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
         // memberRepository를 외부에서 받아오도록 하는 것. dependency injection
+        this.passwordEncoder = passwordEncoder;
     }
 
     /*
      * 회원가입
      */
-    public Long join(Member member) {
+    public Long join(MemberForm memberForm) {
         // 같은 이름이 있는 중복 회원은 X
 //        Optional<Member> result = memberRepository.findByMemberName(member.getMemberName());
 //        result.ifPresent(m -> {
@@ -34,6 +38,12 @@ public class MemberService {
 
         // 중복회원 검증
 //        isDuplicateMember(member);
+
+        Member member = new Member();
+        // member 객체에 값 세팅
+        member.setMemberName(memberForm.getMemberName());
+        member.setMemberPassword(passwordEncoder.encode(memberForm.getMemberPassword()));
+        member.setMemberEmail(memberForm.getMemberEmail());
 
         memberRepository.save(member);
         return member.getMemberId();
@@ -53,7 +63,7 @@ public class MemberService {
     // 회원 정보가 존재하면 true를 반환한다.
     public boolean authenticate(LoginForm loginData) {
         return memberRepository.findByMemberName(loginData.getMemberName())
-                .filter(member -> member.getMemberPassword().equals(loginData.getMemberPassword()))
+                .filter(member -> passwordEncoder.matches(loginData.getMemberPassword(), member.getMemberPassword()))  // 암호화된 비밀번호 비교
                 .isPresent();
     }
 

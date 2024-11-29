@@ -2,15 +2,19 @@ package jkkim.space_reservation.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;  // JwtTokenProvider 주입
+    private final JwtUtil jwtUtil;
 
     public SecurityConfig(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -18,12 +22,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())  // 새로운 비활성화 방식
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login").permitAll()  // 로그인 API는 인증 없이 접근 가능
-                        .anyRequest().authenticated());  // 나머지 API는 인증 필요
-//        CSRF (Cross-Site Request Forgery)는 웹 애플리케이션에서 발생할 수 있는 보안 취약점 중 하나로,
-//        사용자가 인증된 상태에서 악의적인 공격자가 사용자의 권한을 도용하여 원하지 않는 작업을 수행하게 만드는 공격
+        http.csrf(csrf -> csrf.disable())  // CSRF 비활성화
+                .authorizeRequests(authorizeRequests ->
+                                authorizeRequests
+                                        // 예약 및 마이페이지 기능은 로그인 필요 (※괄호 안의 링크는 추후 수정 필요)
+                                        .requestMatchers("/reservation/**", "/mypage/**").authenticated()
+                                        // 나머지 페이지는 모두 접근 가능
+                                        .anyRequest().permitAll()
+                )
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);  // JWT 필터 등록
+
         return http.build();
+    }
+
+    // PasswordEncoder를 @Bean으로 등록 (비밀번호 암호화 용)
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // BCryptPasswordEncoder 사용
     }
 }

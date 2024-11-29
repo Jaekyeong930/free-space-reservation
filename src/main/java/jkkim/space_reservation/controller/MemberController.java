@@ -32,7 +32,6 @@ public class MemberController {
 
     @PostMapping("/members/new")
     public String create(MemberForm form, Model model) {
-        Member member = new Member();
 
         // 아이디 유효성 검사
         if (!isValidName(form)) {
@@ -58,12 +57,8 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
-        // 모두 유효한 값일 경우, member 객체에 값 세팅
-        member.setMemberName(form.getMemberName());
-        member.setMemberPassword(form.getMemberPassword());
-        member.setMemberEmail(form.getMemberEmail());
-
-        memberService.join(member);
+        // 모두 유효한 값일 경우 MemberService로 전달
+        memberService.join(form);
 
         return "redirect:/";
     }
@@ -127,25 +122,23 @@ public class MemberController {
     /*
     * 로그인
     * */
-    @GetMapping("/members/login")
-    public String loginForm() {
-        return "members/login";
+    @GetMapping("/members/loginSuccess")
+    public String loginSuccess() {
+        return "members/loginSuccess";
     }
 
-    @PostMapping()
-    public String login(LoginForm loginForm, Model model) {
-        Member member = new Member();
-
-        // 아이디 존재, 비밀번호 일치 여부 확인
-        if (!memberService.authenticate(loginForm)) {
-            model.addAttribute("loginErrorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
-            return "members/login";
-        }
-
-
-
-        return "redirect:/";
-    }
+//    @PostMapping("/members/login")
+//    public String login(LoginForm loginForm, Model model) {
+//        Member member = new Member();
+//
+//        // 아이디 존재, 비밀번호 일치 여부 확인
+//        if (!memberService.authenticate(loginForm)) {
+//            model.addAttribute("loginErrorMessage", "아이디 또는 비밀번호가 일치하지 않습니다.");
+//            return "members/login";
+//        }
+//
+//        return "redirect:/";
+//    }
 
     /*
     * 회원 조회
