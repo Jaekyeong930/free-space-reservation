@@ -41,7 +41,7 @@ public class AuthService {
         }
 
         // JWT 생성 및 반환
-        String token = jwtUtil.generateToken(member.getMemberName());
+        String token = jwtUtil.generateAccessToken(member.getMemberName());
         return new JwtResponse(token);
     }
 }

@@ -3,7 +3,6 @@ package jkkim.space_reservation.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class Member {
@@ -18,8 +17,8 @@ public class Member {
     @Column(name = "member_name", nullable = false, updatable = false)
     private String  memberName;
 
-    @Column(name = "member_type", nullable = false, updatable = false)
-    private boolean memberType = false;
+    @Column(name = "member_role", nullable = false, updatable = false)
+    private boolean memberRole = false;
 
     @Column(name = "member_password", nullable = false)
     private String  memberPassword;
@@ -44,6 +43,9 @@ public class Member {
 //    public void setMemberType(boolean memberType) {
 //        this.memberType = memberType;
 //    }
+    public void setMemberRole(Boolean memberRole) {
+    this.memberRole = memberRole;
+}
 
     public void setMemberPassword(String memberPassword) {
         this.memberPassword = memberPassword;
@@ -67,7 +69,7 @@ public class Member {
         return memberName;
     }
 
-    public boolean isMemberType() { return memberType; }
+    public boolean getMemberRole() { return memberRole; }
 
     public String getMemberPassword() {
         return memberPassword;
@@ -78,5 +80,6 @@ public class Member {
     }
 
     public LocalDateTime getMemberCreatedAt() { return memberCreatedAt; }
+
 
 }
