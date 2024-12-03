@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -37,6 +38,13 @@ public class SecurityConfig {
                                     .requestMatchers("/reservation/**", "/mypage/**").authenticated()
                                     // 나머지 페이지는 모두 접근 가능
                                     .anyRequest().permitAll()
+                    )
+                    .formLogin(form ->
+                            form.loginPage("/members/login") // 로그인 페이지 URL 지정
+                                    .permitAll() // 로그인 페이지는 누구나 접근 가능
+                    )
+                    .exceptionHandling(exceptionHandling ->
+                            exceptionHandling.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/members/login"))
                     )
                     // JWT 필터 등록
                     .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

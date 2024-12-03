@@ -8,10 +8,19 @@
   <div>
     <h1>Space Reservation System</h1>
     <p>회원 기능</p>
+    <!-- 로그인된 사용자일 때 보여주는 메시지 -->
+    <div th:if="${memberName}">
+      <p th:text="${memberName} + '님, 안녕하세요!'" style="color:green;"></p>
+      <p><a th:href="@{/members/logout}">로그아웃</a></p>
+    </div>
+    <!-- 로그인되지 않은 경우 메시지 -->
+    <div th:if="${memberName == null}">
+      <p style="color:red;">로그인이 필요합니다.</p>
+      <p><a th:href="@{/members/login}">로그인</a></p>
+    </div>
     <p>
-      <a href="/members/login">로그인</a>
-      <a href="/members/new">회원 가입</a>
-      <a href="/members">회원 목록</a>
+      <a th:href="@{/members/new}">회원 가입</a>
+      <a th:href="@{/members}">회원 목록</a>
     </p>
   </div>
 </body>

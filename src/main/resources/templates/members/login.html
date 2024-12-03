@@ -18,8 +18,8 @@
             </div>
         </div>
         <!-- 에러메시지 -->
-        <div th:if="${loginErrorMessage}" style="color:red;">
-            <p th:text="${loginErrorMessage}"></p>
+        <div th:if="${errorMessage}" style="color:red;">
+            <p th:text="${errorMessage}"></p>
         </div>
         <button type="submit">로그인</button>
     </form>
