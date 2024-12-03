@@ -22,7 +22,7 @@ FLUSH PRIVILEGES;
 CREATE TABLE member
 (
     member_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    member_type BOOLEAN NOT NULL DEFAULT 0,    -- 기본값 0, NULL 불가
+    member_role BOOLEAN NOT NULL DEFAULT 0,    -- 기본값 0, NULL 불가
     member_name VARCHAR(255) NOT NULL,          -- NULL 불가
     member_password VARCHAR(255) NOT NULL,      -- NULL 불가
     member_email VARCHAR(255) NOT NULL,         -- NULL 불가
