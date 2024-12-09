@@ -30,6 +30,35 @@ public class JwtUtil {
                 .compact();
     }
 
+    // JWT 검증
+    public Claims validateToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    // 토큰 만료 여부 확인
+    public boolean isTokenExpired(Claims claims) {
+        // 만료되지 않은 토큰이면 True 반환
+        return !claims.getExpiration().before(new Date());
+    }
+
+    // 토큰에서 유저 인증 정보 추출
+    public Authentication getAuthentication(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        String username = claims.getSubject();
+        return new UsernamePasswordAuthenticationToken(
+                new User(username, "", new ArrayList<>()), null, new ArrayList<>());
+    }
+}
+
+
 //    // Access Token을 HTTP Only 쿠키에 설정
 //    public void setAccessTokenInCookie(HttpServletResponse response, String jwtToken) {
 //        // HTTP Only 쿠키로 Access Token 설정
@@ -49,30 +78,3 @@ public class JwtUtil {
 //
 ////        response.addCookie(cookie);
 //    }
-
-    // JWT 검증
-    public Claims validateToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    // 토큰 만료 여부 확인
-    public boolean isTokenExpired(Claims claims) {
-        return claims.getExpiration().before(new Date());
-    }
-
-    // 토큰에서 유저 인증 정보 추출
-    public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        String username = claims.getSubject();
-        return new UsernamePasswordAuthenticationToken(
-                new User(username, "", new ArrayList<>()), null, new ArrayList<>());
-    }
-}

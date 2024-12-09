@@ -5,18 +5,24 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jkkim.space_reservation.security.JwtUtil;
 import jkkim.space_reservation.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.authentication.AuthenticationManager;
 
 @Controller
 //@RequestMapping("/api/auth")  <- RESTful API 스타일을 따르기 위한 목적. 로그인, 회원가입, 토큰 발급 등과 같은 인증 관련 API를 모아서 관리하는 목적
 public class AuthController {
 
+    @Autowired
     private final AuthService authService;
+    @Autowired
     private final JwtUtil jwtUtil;
 
 
@@ -32,6 +38,7 @@ public class AuthController {
 
     // POST /api/auth/login
     @PostMapping("/members/login")
+
     public ResponseEntity<?> login(@RequestBody LoginForm loginForm,
                                    HttpServletResponse response,
                                    RedirectAttributes redirectAttributes) {
@@ -43,19 +50,24 @@ public class AuthController {
             String token = jwtUtil.generateAccessToken(member.getMemberName(), member.getMemberRole());
 
             // JWT 쿠키 저장
-            Cookie jwtCookie = new Cookie("jwt", token);
+            Cookie jwtCookie = new Cookie("accessToken", token);
             jwtCookie.setHttpOnly(true); // JavaScript에서 접근 불가
-            jwtCookie.setSecure(true);  // HTTPS에서만 전송
+            jwtCookie.setSecure(false);  // HTTPS에서만 전송
             jwtCookie.setPath("/");     // 모든 경로에 대해 유효
-            jwtCookie.setMaxAge(3600); // 1시간 (초 단위)
+            jwtCookie.setMaxAge(60*60); // 1시간 (초 단위)
+            // SameSite 속성 설정
+            response.addHeader("Set-Cookie",
+                    "accessToken=" + token + "; HttpOnly; Secure; Path=/; Max-Age=3600; SameSite=None");
 
-            response.addCookie(jwtCookie);
+
+            response.addCookie(jwtCookie); // 쿠키를 응답에 추가
 
             // 로그인 성공 후 홈 화면으로 리다이렉트
-            return ResponseEntity.status(HttpStatus.FOUND)  // 302 Found (리다이렉트)
-                    .header("Location", "/")
-                    .build();
+//            return ResponseEntity.status(HttpStatus.FOUND)  // 302 Found (리다이렉트)
+//                    .header("Location", "/")
+//                    .build();
 
+            return ResponseEntity.ok("Login Successful");
 
         } catch (IllegalArgumentException e) {
             // 로그인 실패 시 로그인 페이지로 리다이렉트하면서 에러 메시지 전달
@@ -75,7 +87,7 @@ public class AuthController {
     @PostMapping("/members/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
         // JWT 쿠키 제거
-        Cookie jwtCookie = new Cookie("jwt", null); // 쿠키 값 제거
+        Cookie jwtCookie = new Cookie("accessToken", null); // 쿠키 값 제거
         jwtCookie.setHttpOnly(true);
         jwtCookie.setSecure(true);
         jwtCookie.setPath("/");
@@ -88,6 +100,9 @@ public class AuthController {
                 .body("로그인이 필요합니다"); // 상태 메시지 전달
     }
 
+
+
+}
 
 
 //    public String login(@ModelAttribute LoginForm loginForm, HttpServletResponse response, Model model) {
@@ -104,4 +119,3 @@ public class AuthController {
 //            return "members/login";  // 로그인 실패 시 로그인 페이지로 리턴
 //        }
 //    }
-}

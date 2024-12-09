@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,8 +31,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = resolveToken(request);
 
         // 토큰이 존재하고 유효하다면
-        if (StringUtils.hasText(token) && jwtUtil.isTokenExpired(jwtUtil.validateToken(token))) {
-            var authentication = jwtUtil.getAuthentication(token);
+        if (token != null && jwtUtil.isTokenExpired(jwtUtil.validateToken(token))) {
+            // 인증 설정
+            Authentication authentication = jwtUtil.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
@@ -45,7 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return bearerToken.substring(7); // "Bearer " 이후의 토큰 반환
         }
 
-        // 쿠키에서 refreshToken 추출
+        // 쿠키에서 accessToken 추출
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
