@@ -1,4 +1,4 @@
-package jkkim.space_reservation.domain;
+package jkkim.space_reservation.entity;
 
 import jakarta.persistence.*;
 

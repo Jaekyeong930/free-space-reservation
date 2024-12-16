@@ -62,10 +62,10 @@ public class SecurityConfig {
         }
 
     // PasswordEncoder를 @Bean으로 등록 (비밀번호 암호화 용)
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // BCryptPasswordEncoder 사용
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder(); // BCryptPasswordEncoder 사용
+//    }
 
 
 

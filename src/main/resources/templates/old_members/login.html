@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http:///www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('form').addEventListener('submit', function (event) {
+                event.preventDefault(); // 폼 기본 동작 방지
+
+                const memberName = document.querySelector('#memberName').value;
+                const memberPassword = document.querySelector('#memberPassword').value;
+
+                fetch('/members/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  // JSON 형식으로 요청 보내기
+                    },
+                    body: JSON.stringify({
+                        memberName: memberName,
+                        memberPassword: memberPassword
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // 로그인 성공: 홈으로 리다이렉트
+                        window.location.href = '/';
+                    } else if (response.status === 401) {
+                        alert('로그인 정보가 잘못되었습니다.');
+                    } else {
+                        throw new Error('예상치 못한 오류 발생');
+                    }
+                })
+                .catch(error => {
+                    console.error('에러 발생:', error.message);
+                    alert('서버에 문제가 발생했습니다. 나중에 다시 시도해주세요.');
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <form action="#" th:action="@{/members/login}" th:object="${memberForm}" method="post">
+        <div class="form-group">
+            <div>
+                <label for="memberName">아이디</label>
+                <input type="text" id="memberName" name="memberName" placeholder="아이디를 입력하세요"/>
+            </div>
+            <div>
+                <label for="memberPassword">비밀번호</label>
+                <input type="password" id="memberPassword" name="memberPassword" placeholder="비밀번호를 입력하세요"/>
+            </div>
+        </div>
+        <!-- 에러메시지 -->
+        <div th:if="${errorMessage}" style="color:red;">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        <button type="submit">로그인</button>
+    </form>
+</div>
+</body>
+</html>

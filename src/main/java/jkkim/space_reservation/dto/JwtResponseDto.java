@@ -1,10 +1,9 @@
-package jkkim.space_reservation.controller;
+package jkkim.space_reservation.dto;
 
-public class JwtResponse {
-
+public class JwtResponseDto {
     private String token;
 
-    public JwtResponse(String token) {
+    public JwtResponseDto(String token) {
         this.token = token;
     }
 

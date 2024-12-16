@@ -1,19 +1,23 @@
 package jkkim.space_reservation.repository;
 
-import jkkim.space_reservation.domain.Member;
+import jkkim.space_reservation.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-/*
-* repository는 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리
-* */
+// 멤버 레포지토리(DB연동)
+@Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Member save(Member member);
-    Optional<Member> findByMemberId(Long memberId);
+    // ID로 회원 조회
     Optional<Member> findByMemberName(String memberName);
-    List<Member> findAll();
-//    Optional이란?
-//    특정 컬럼을 키값으로 하여 검색했을 때 null을 반환하면 Optinal로 감싸서 반환한다
+
+    // admin 권한을 가진 회원 조회
+    Optional<Member> findByIsAdmin(Boolean isAdmin);
+
+    // 멤버 삭제
+
+    // 멤버 정보 변경?
+
+
 }

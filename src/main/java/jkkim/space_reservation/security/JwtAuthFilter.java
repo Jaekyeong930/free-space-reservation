@@ -1,5 +1,6 @@
 package jkkim.space_reservation.security;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -30,11 +31,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String token = resolveToken(request);
 
+
         // 토큰이 존재하고 유효하다면
-        if (token != null && jwtUtil.isTokenExpired(jwtUtil.validateToken(token))) {
-            // 인증 설정
-            Authentication authentication = jwtUtil.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (token != null) {
+            try {
+                Claims claims = jwtUtil.decodeToken(token); // JWT 디코딩
+                if (!jwtUtil.isTokenExpired(claims)) { // 토큰 만료 여부 확인
+                    // 인증 설정
+                    Authentication authentication = jwtUtil.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+                // 디코딩 또는 유효성 검사 실패 시 처리
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Invalid or expired token");
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);

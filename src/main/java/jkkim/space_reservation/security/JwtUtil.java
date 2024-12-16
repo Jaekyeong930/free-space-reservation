@@ -6,17 +6,18 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-
+import java.util.Base64;
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "my-secret-key"; // JWT 서명 키
+    private static final String SECRET_KEY = "my-secret-key"; // JWT 서명 키
     private static final long EXPIRATION_TIME = 3600; // 1시간
 
     // JWT 생성
@@ -56,7 +57,54 @@ public class JwtUtil {
         return new UsernamePasswordAuthenticationToken(
                 new User(username, "", new ArrayList<>()), null, new ArrayList<>());
     }
+
+    public static String decodeBase64Url(String base64Url) {
+        // Base64 URL-safe 문자 '-' -> '+' , '_' -> '/' 변환
+        String base64 = base64Url.replace('-', '+').replace('_', '/');
+
+        // Base64 인코딩된 문자열의 길이가 4의 배수가 되도록 "=" 패딩 추가
+        int paddingLength = 4 - (base64.length() % 4);
+        if (paddingLength != 4) {
+            base64 += "=".repeat(paddingLength); // Java 17에서 지원되는 String.repeat() 메소드 사용
+        }
+
+        // Base64 디코딩
+        return new String(Base64.getDecoder().decode(base64));
+    }
+
+    public static Claims decodeToken(String token) {
+        byte[] decodedKey = Base64.getUrlDecoder().decode(SECRET_KEY);
+        return Jwts.parserBuilder()
+                .setSigningKey(decodedKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+//    // JWT에서 Header와 Payload를 디코딩하여 반환하는 메소드
+//    public String decodeJwtPart(String jwt, int partIndex) {
+//        String[] jwtParts = jwt.split("\\.");  // JWT는 '.'로 구분된 세 부분으로 나눠짐
+//        if (partIndex < 0 || partIndex > 1) {
+//            throw new IllegalArgumentException("Invalid part index. Use 0 for header or 1 for payload.");
+//        }
+//        return decodeBase64Url(jwtParts[partIndex]);
+//    }
+
+    // Authentication 객체 생성
+//    public static void main(String[] args) {
+//        JwtUtil jwtUtil = new JwtUtil();
+//
+//        String jwt = "your-jwt-token";
+//
+//        // JWT에서 Header와 Payload를 디코딩
+//        String decodedHeader = jwtUtil.decodeJwtPart(jwt, 0);  // 0은 Header
+//        String decodedPayload = jwtUtil.decodeJwtPart(jwt, 1);  // 1은 Payload
+//
+//        System.out.println("Decoded Header: " + decodedHeader);
+//        System.out.println("Decoded Payload: " + decodedPayload);
+//    }
 }
+
 
 
 //    // Access Token을 HTTP Only 쿠키에 설정
