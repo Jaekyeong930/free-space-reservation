@@ -3,6 +3,8 @@ package jkkim.space_reservation.controller;
 import jkkim.space_reservation.dto.JwtResponseDto;
 import jkkim.space_reservation.dto.LoginRequestDto;
 import jkkim.space_reservation.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    @Autowired
+    @Qualifier("jwtUtil")
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 

@@ -3,9 +3,11 @@ package jkkim.space_reservation.service;
 import jkkim.space_reservation.entity.Member;
 import jkkim.space_reservation.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AdminService {
 
     private final MemberRepository memberRepository;

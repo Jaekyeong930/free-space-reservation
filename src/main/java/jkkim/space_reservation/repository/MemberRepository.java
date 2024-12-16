@@ -13,7 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByMemberName(String memberName);
 
     // admin 권한을 가진 회원 조회
-    Optional<Member> findByIsAdmin(Boolean isAdmin);
+    Optional<Member> findByMemberRole(Boolean memberRole);
 
     // 멤버 삭제
 

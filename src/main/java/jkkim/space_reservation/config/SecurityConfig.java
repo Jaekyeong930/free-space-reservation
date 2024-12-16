@@ -3,6 +3,7 @@ package jkkim.space_reservation.config;
 import jkkim.space_reservation.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,7 +18,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 // Spring Security 설정
 @EnableWebSecurity
 @Configuration
+@Lazy
 public class SecurityConfig {
+    private final PasswordEncoder passwordEncoder;
+
+    // 생성자로 필요한 빈 주입
+    public SecurityConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     // SecurityFilterChain으로 HttpSecurity 설정
     @Bean
@@ -59,7 +67,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
 
 
     // 비밀번호 암호화 방식 설정 (BCryptPasswordEncoder)
