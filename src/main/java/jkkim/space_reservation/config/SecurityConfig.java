@@ -1,6 +1,7 @@
 package jkkim.space_reservation.config;
 
 import jkkim.space_reservation.security.JwtAuthFilter;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -20,17 +21,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @Lazy
 public class SecurityConfig {
+
+    private final CorsFilter corsFilter;
     private final PasswordEncoder passwordEncoder;
 
     // 생성자로 필요한 빈 주입
-    public SecurityConfig(PasswordEncoder passwordEncoder) {
+    public SecurityConfig(CorsFilter corsFilter, PasswordEncoder passwordEncoder) {
+        this.corsFilter = corsFilter;
         this.passwordEncoder = passwordEncoder;
     }
 
     // SecurityFilterChain으로 HttpSecurity 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())  // CSRF 비활성화 (REST API에서는 CSRF 보호가 필요하지 않음)
+        http.csrf((csrf -> csrf.disable()))  // CSRF 비활성화 (REST API에서는 CSRF 보호가 필요하지 않음)
+//                http.csrf(AbstractHttpConfigurer::disable)
+                // 세션 관리를 "STATELESS"로 설정하여 세션을 사용하지 않도록 설정
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // formLogin을 비활성화하여 기본 로그인 페이지 삭제
+                .formLogin(form -> form.disable())
+                .addFilter(corsFilter)
+                // JWT는 httpBearer 방식이므로 httpBasic 방식은 disable 처리
+                .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
                                 // 관리자 권한이 필요한 경로는 ROLE_ADMIN만 접근 가능
@@ -41,14 +53,6 @@ public class SecurityConfig {
                                 .requestMatchers("/","/login", "/register").permitAll()
                                 // 나머지 페이지는 인증된 상태에서만 접근 가능
                                 .anyRequest().authenticated()
-                )
-                // formLogin을 비활성화하여 세션을 생성하지 않도록 함
-                .formLogin(form ->
-                        form.disable()
-                )
-                // 세션 관리를 "STATELESS"로 설정하여 세션을 사용하지 않도록 설정
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 // 인증되지 않은 사용자가 접근할 경우, 로그인 페이지로 리다이렉트
                 .exceptionHandling(exceptionHandling ->
